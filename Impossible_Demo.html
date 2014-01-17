@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>42</title>
+
+        <link href="public/css/jquery.reject.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="public/css/ui-lightness/jquery-ui-1.10.2.custom.min.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="public/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="public/css/style.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="public/css/bootstrap-responsive.min.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="public/css/tinyscrollbar.css" media="screen" rel="stylesheet" type="text/css">
+        <link href="public/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+
+        <script type="text/javascript" src="public/js/jquery.min.js"></script>
+        <script type="text/javascript" src="public/js/bootstrap.min.js"></script>
+
+        <style>
+            .temp{
+                margin-left: 50px;
+            }           
+            .val_select{
+                cursor: pointer;
+            }
+            .div_list{
+                position: absolute;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                width: 225px;
+                display: none;
+                min-width: 160px;
+                margin: 2px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border: 1px solid rgba(0,0,0,0.2);
+                -webkit-border-radius: 6px;
+                -moz-border-radius: 6px;
+                border-radius: 6px;
+                -webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+                -moz-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+                -webkit-background-clip: padding-box;
+                -moz-background-clip: padding;
+                background-clip: padding-box;
+            }
+            .list_style li{
+                padding: 3px 20px;
+                list-style: none;
+                cursor: pointer;
+            }
+            .list_style li:hover{
+                background: #08c;
+                color: #fff;
+            }
+            .selected_li{
+                background: #D8D8D8;
+                cursor: default !important;
+            }
+            ul, ol {
+                margin: 0 !important;
+            }
+            .list_val{
+                cursor: pointer;
+                border-bottom: 1px dotted #08c;
+            }
+        </style>
+
+        <script>
+            function CoolSelect(val_name) {
+
+                if (typeof(val_name) == "string") {
+                    val_name = $(val_name);
+                    console.log(val_name);
+                } else if (val_name instanceof jQuery) {
+                    console.log("It's jQuery object :]");
+                } else if (!(val_name instanceof jQuery)) {
+                    throw new Error("Wrong type of input!");
+                }
+
+
+                val_name.each(function() {
+                    var select_val = $(this);
+                    //var text_val = $(this).val();
+                    select_val.hide();
+
+                    /* Start of code generation */
+
+                    var select_div = $("<div class='select_div'></div>");
+                    var span_value = $("<span class='list_val'></span>");
+                    var select_div_div = $("<div class='div_list'></div>");
+                    var select_ul = $("<ul class='list_style'></ul>");
+
+                    select_div.insertAfter(select_val);
+                    span_value.appendTo(select_div);
+                    select_div_div.appendTo(select_div);
+                    select_ul.appendTo(select_div_div);
+
+                    select_val.find("option").each(function() {
+                        var option_var = $(this);
+                        var opt_val = option_var.val();
+                        var li = $("<li></li>");
+                        li.text(option_var.text()).appendTo(select_ul);
+                        li.data("value", opt_val);
+
+                        if (option_var.is(':selected')) {
+                            span_value.text(option_var.text());
+                            li.addClass("selected_li");
+                        }
+                        li.on("click", function(event) {
+                            var li_target = $(event.target);
+                            li_target.siblings().removeClass("selected_li");
+                            li_target.addClass("selected_li");
+
+                            select_val.val(li_target.data("value"));
+
+                        });
+
+                        /* End of code generation */
+
+                    });
+
+
+                    span_value.on("click", function(event) {
+                        if (select_div_div.is(':hidden')) {
+                            select_div_div.fadeIn(300);
+                        } else {
+                            select_div_div.fadeOut(300);
+                        }
+                        ;
+                    });
+
+                    select_ul.on("click", function(event) {
+                        select_div_div.fadeOut(300);
+                        var target = event.target || event.srcElement;
+                        span_value.html(target.innerHTML);
+                    });
+                });
+            }
+            ;
+
+            $(document).ready(function() {
+                    CoolSelect(".val_select");
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="temp">
+
+            <select class="val_select">
+                <option value="1">Вкл</option>
+                <option value="2" selected>Выкл</option>
+                <option value="3">Наследовать от родителя</option>
+            </select>
+
+            <select class="val_select">
+                <option value="1">Вкл1</option>
+                <option value="2">Выкл1</option>
+                <option value="3" selected>Наследовать от родителя1</option>
+            </select>
+
+            <select class="val_select">
+                <option value="1" selected>Вкл2</option>
+                <option value="2">Выкл2</option>
+                <option value="3">Наследовать от родителя2</option>
+            </select>
+
+        </div>
+    </body>
+</html>
